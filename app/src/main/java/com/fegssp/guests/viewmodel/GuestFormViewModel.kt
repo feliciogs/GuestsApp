@@ -9,7 +9,7 @@ import com.fegssp.guests.repository.GuestRepository
 
 class GuestFormViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = GuestRepository.getInstance(application)
+    private val repository = GuestRepository(application.applicationContext)
 
     private val guestModel = MutableLiveData<GuestModel>()
     var guest : LiveData<GuestModel> = guestModel

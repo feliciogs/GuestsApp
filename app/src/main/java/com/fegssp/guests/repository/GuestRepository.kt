@@ -6,25 +6,13 @@ import com.fegssp.guests.contants.DataBaseConstants
 import com.fegssp.guests.model.GuestModel
 import java.lang.Exception
 
-class GuestRepository private constructor(context: Context) {
+class GuestRepository(context: Context) {
 
-    private val guestDataBase = GuestDataBase(context)
-
-    //Singleton
-    companion object{
-        private lateinit var repository : GuestRepository
-
-        fun getInstance(context: Context): GuestRepository {
-            if(!Companion::repository.isInitialized){
-                repository = GuestRepository(context)
-            }
-            return repository
-        }
-
-    }
+    private val guestDataBase = GuestDataBase.getDataBase(context).guestDAO()
 
     fun insert(guest: GuestModel):Boolean{
-        return try {
+        return guestDataBase.insert(guest) > 0
+        /*return try {
             val db = guestDataBase.writableDatabase
             val presence = if(guest.presence) 1 else 0
 
@@ -36,11 +24,12 @@ class GuestRepository private constructor(context: Context) {
             true
         }catch (e: Exception){
             false
-        }
+        }*/
     }
 
     fun update(guest: GuestModel):Boolean{
-        try {
+        return guestDataBase.update(guest) > 0
+        /*try {
             val db = guestDataBase.writableDatabase
             val presence = if(guest.presence)1 else 0
 
@@ -56,11 +45,13 @@ class GuestRepository private constructor(context: Context) {
             return true
         }catch (e:Exception){
             return false
-        }
+        }*/
     }
 
-    fun delete(id: Int):Boolean{
-        return try {
+    fun delete(id: Int){
+        val guest = getGuest(id)
+        guestDataBase.delete(guest)
+        /*return try {
             val db = guestDataBase.writableDatabase
 
             val selection = DataBaseConstants.GUEST.COLUMNS.ID + " = ?"
@@ -70,11 +61,12 @@ class GuestRepository private constructor(context: Context) {
             true
         }catch (e:Exception){
             false
-        }
+        }*/
     }
 
     fun getAll(): List<GuestModel>{
-        var listGuest = mutableListOf<GuestModel>()
+        return guestDataBase.getAll()
+        /*var listGuest = mutableListOf<GuestModel>()
         try {
             val db = guestDataBase.readableDatabase
 
@@ -99,11 +91,12 @@ class GuestRepository private constructor(context: Context) {
         }catch (e:Exception){
             return listGuest
         }
-        return listGuest
+        return listGuest*/
     }
 
     fun getPresent(): List<GuestModel>{
-        var listGuest = mutableListOf<GuestModel>()
+        return guestDataBase.getPresent()
+        /*var listGuest = mutableListOf<GuestModel>()
         try {
             val db = guestDataBase.readableDatabase
 
@@ -131,11 +124,12 @@ class GuestRepository private constructor(context: Context) {
         }catch (e:Exception){
             return listGuest
         }
-        return listGuest
+        return listGuest*/
     }
 
     fun getAbsent(): List<GuestModel>{
-        var listGuest = mutableListOf<GuestModel>()
+        return guestDataBase.getAbsent()
+        /*var listGuest = mutableListOf<GuestModel>()
         try {
             val db = guestDataBase.readableDatabase
 
@@ -163,11 +157,12 @@ class GuestRepository private constructor(context: Context) {
         }catch (e:Exception){
             return listGuest
         }
-        return listGuest
+        return listGuest*/
     }
 
-    fun getGuest(id: Int): GuestModel? {
-        var guest : GuestModel? = null
+    fun getGuest(id: Int): GuestModel {
+        return guestDataBase.getGuest(id)
+        /*var guest : GuestModel? = null
         try {
             val db = guestDataBase.readableDatabase
 
@@ -197,6 +192,6 @@ class GuestRepository private constructor(context: Context) {
         }catch (e:Exception){
             return guest
         }
-        return guest
+        return guest*/
     }
 }
