@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,19 +12,19 @@ import com.fegssp.guests.contants.DataBaseConstants
 import com.fegssp.guests.databinding.FragmentAllGuestsBinding
 import com.fegssp.guests.view.adapter.GuestsAdapter
 import com.fegssp.guests.view.listener.OnGuestListener
-import com.fegssp.guests.viewmodel.AllGuestsViewlModel
+import com.fegssp.guests.viewmodel.GuestsViewlModel
 
 class AllGuestsFragment : Fragment() {
 
     private var _binding: FragmentAllGuestsBinding? = null
-    private lateinit var viewModel : AllGuestsViewlModel
     private val binding get() = _binding!!
 
+    private lateinit var viewModel : GuestsViewlModel
     private val adapter = GuestsAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        viewModel = ViewModelProvider(this).get(AllGuestsViewlModel::class.java)
+        viewModel = ViewModelProvider(this).get(GuestsViewlModel::class.java)
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
 
         //Layout
@@ -33,8 +32,6 @@ class AllGuestsFragment : Fragment() {
 
         //Adapter
         binding.recyclerAllGuests.adapter = adapter
-
-        viewModel.getAll()
 
         setClickGuestListener()
         observer()
@@ -45,6 +42,12 @@ class AllGuestsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAll()
+
     }
 
     private fun observer(){
@@ -60,9 +63,8 @@ class AllGuestsFragment : Fragment() {
                 val bundle = Bundle()
 
                 bundle.putInt(DataBaseConstants.GUEST.ID,id)
-                intent.putE
-
-
+                intent.putExtras(bundle)
+                startActivity(intent)
             }
 
             override fun onDelete(id: Int) {

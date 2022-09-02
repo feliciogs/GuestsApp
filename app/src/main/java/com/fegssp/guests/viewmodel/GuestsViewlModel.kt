@@ -8,15 +8,21 @@ import androidx.lifecycle.ViewModel
 import com.fegssp.guests.model.GuestModel
 import com.fegssp.guests.repository.GuestRepository
 
-class AllGuestsViewlModel(application: Application) : AndroidViewModel(application) {
+class GuestsViewlModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = GuestRepository.getInstance(application.applicationContext)
     private val listAllGuest = MutableLiveData<List<GuestModel>>()
-
     val guests: LiveData<List<GuestModel>> = listAllGuest
 
     fun getAll(){
         listAllGuest.value = repository.getAll()
+    }
+
+    fun getAbsent(){
+        listAllGuest.value = repository.getAbsent()
+    }
+    fun getPresent(){
+        listAllGuest.value = repository.getPresent()
     }
 
     fun delete(id:Int){
